@@ -18,4 +18,15 @@ users = conn.list_users()
 for key in users['Users']:
     if 'PasswordLastUsed' in key:
         if key['PasswordLastUsed'] <= timeLimit:
-            print key['UserName'], "\t\t" , key['PasswordLastUsed']
+            name = key['UserName']
+            print name, "\t\t" , key['PasswordLastUsed']
+            try:
+                response = conn.get_login_profile(UserName=name)
+            except Exception, e:
+                if e.response['ResponseMetadata']['HTTPStatusCode'] == 404:
+                    print('User {} has no login profile'.format(name))
+            else:
+                response = conn.delete_login_profile(
+                    UserName = name,
+                )
+                print "password deleted"

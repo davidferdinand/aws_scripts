@@ -53,27 +53,11 @@ for page in paginator.paginate():
                         UserName=name,
                         SerialNumber=md
                     )
-                del_user = conn.delete_user(UserName=name)
-                print (del_user)
-
-
-
-
-
-
-
-
-
-
-
-
-                # try:
-                #     response = conn.get_login_profile(UserName=name)
-                # except Exception, e:
-                #     if e.response['ResponseMetadata']['HTTPStatusCode'] == 404:
-                #         print('User {} has no login profile'.format(name))
-                # else:
-                #     response = conn.delete_login_profile(
-                #         UserName = name,
-                #     )
-                #     print "password deleted"
+                try:
+                    del_user = conn.delete_user(UserName=name)
+                except Exception, e:
+                    if e.response['ResponseMetadata']['HTTPStatusCode'] != 200:
+                        print('Error deleting user')
+                else:
+                    print "user deleted"
+                    print (del_user)
